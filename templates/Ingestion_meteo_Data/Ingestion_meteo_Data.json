@@ -1,0 +1,161 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"type": "string",
+			"metadata": "Workspace name",
+			"defaultValue": "sogui"
+		},
+		"AzureDataLakeStorage1": {
+			"type": "string"
+		}
+	},
+	"variables": {
+		"workspaceId": "[concat('Microsoft.Synapse/workspaces/', parameters('workspaceName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('workspaceName'), '/Ingestion_meteo_Data')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "meteoCSV",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Sink_meteo_Processed",
+								"type": "DatasetReference"
+							}
+						]
+					}
+				],
+				"annotations": [],
+				"lastPublishTime": "2024-07-21T13:29:00Z"
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/meteoCSV')]",
+				"[concat(variables('workspaceId'), '/datasets/Sink_meteo_Processed')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/meteoCSV')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('AzureDataLakeStorage1')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "meteo-france.csv",
+						"fileSystem": "raw-data"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ID OMM station;Date;Pression au niveau mer;Variation de pression en 3 heures;Type de tendance barom�trique;Direction du vent moyen 10 mn;Vitesse du vent moyen 10 mn;Temp�rature;Point de ros�e;Humidit�;Visibilit� horizontale;Temps pr�sent;Temps pass� 1;Temps pass� 2;Nebulosit� totale;N�bulosit�  des nuages de l' �tage inf�rieur;Hauteur de la base des nuages de l'�tage inf�rieur;Type des nuages de l'�tage inf�rieur;Type des nuages de l'�tage moyen;Type des nuages de l'�tage sup�rieur;Pression station;Niveau barom�trique;G�opotentiel;Variation de pression en 24 heures;Temp�rature minimale sur 12 heures;Temp�rature minimale sur 24 heures;Temp�rature maximale sur 12 heures;Temp�rature maximale sur 24 heures;Temp�rature minimale du sol sur 12 heures;M�thode de mesure Temp�rature du thermom�tre mouill�;Temp�rature du thermom�tre mouill�;Rafale sur les 10 derni�res minutes;Rafales sur une p�riode;Periode de mesure de la rafale;Etat du sol;Hauteur totale de la couche de neige, glace, autre au sol;Hauteur de la neige fra�che;Periode de mesure de la neige fraiche;Pr�cipitations dans la derni�re heure;Pr�cipitations dans les 3 derni�res heures;Pr�cipitations dans les 6 derni�res heures;Pr�cipitations dans les 12 derni�res heures;Pr�cipitations dans les 24 derni�res heures;Ph�nom�ne sp�cial 1;Ph�nom�ne sp�cial 2;Ph�nom�ne sp�cial 3;Ph�nom�ne sp�cial 4;N�bulosit� couche nuageuse 1;Type nuage 1;Hauteur de base 1;N�bulosit� couche nuageuse 2;Type nuage 2;Hauteur de base 2;N�bulosit� couche nuageuse 3;Type nuage 3;Hauteur de base 3;N�bulosit� couche nuageuse 4;Type nuage 4;Hauteur de base 4;Coordonnees;Nom;Type de tendance barom�trique;Temps pass� 1;Temps pr�sent;Temp�rature (�C);Temp�rature minimale sur 12 heures (�C);Temp�rature minimale sur 24 heures (�C);Temp�rature maximale sur 12 heures (�C);Temp�rature maximale sur 24 heures (�C);Temp�rature minimale du sol sur 12 heures (en �C);Latitude;Longitude;Altitude;communes (name);communes (code);EPCI (name);EPCI (code);department (name);department (code);region (name);region (code);mois_de_l_annee",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Sink_meteo_Processed')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('AzureDataLakeStorage1')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "processed-data"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Date;Service;Gare de départ;Gare d'arrivée;Durée moyenne du trajet;Nombre de circulations prévues;Nombre de trains annulés;Commentaire annulations;Nombre de trains en retard au départ;Retard moyen des trains en retard au départ;Retard moyen de tous les trains au départ;Commentaire retards au départ;Nombre de trains en retard à l'arrivée;Retard moyen des trains en retard à l'arrivée;Retard moyen de tous les trains à l'arrivée;Commentaire retards à l'arrivée;Nombre trains en retard > 15min;Retard moyen trains en retard > 15 (si liaison concurrencée par vol);Nombre trains en retard > 30min;Nombre trains en retard > 60min;Prct retard pour causes externes;Prct retard pour cause infrastructure;Prct retard pour cause gestion trafic;Prct retard pour cause matériel roulant;Prct retard pour cause gestion en gare et réutilisation de matériel;Prct retard pour cause prise en compte voyageurs (affluence",
+						"type": "String"
+					},
+					{
+						"name": " gestions PSH",
+						"type": "String"
+					},
+					{
+						"name": " correspondances)",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		}
+	]
+}
