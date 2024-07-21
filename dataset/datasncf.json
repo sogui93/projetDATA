@@ -1,0 +1,129 @@
+{
+	"name": "datasncf",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "regularite-mensuelle-tgv-aqst.csv",
+				"fileSystem": "raw-data"
+			},
+			"columnDelimiter": ";",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Date",
+				"type": "String"
+			},
+			{
+				"name": "Service",
+				"type": "String"
+			},
+			{
+				"name": "Gare de départ",
+				"type": "String"
+			},
+			{
+				"name": "Gare d'arrivée",
+				"type": "String"
+			},
+			{
+				"name": "Durée moyenne du trajet",
+				"type": "String"
+			},
+			{
+				"name": "Nombre de circulations prévues",
+				"type": "String"
+			},
+			{
+				"name": "Nombre de trains annulés",
+				"type": "String"
+			},
+			{
+				"name": "Commentaire annulations",
+				"type": "String"
+			},
+			{
+				"name": "Nombre de trains en retard au départ",
+				"type": "String"
+			},
+			{
+				"name": "Retard moyen des trains en retard au départ",
+				"type": "String"
+			},
+			{
+				"name": "Retard moyen de tous les trains au départ",
+				"type": "String"
+			},
+			{
+				"name": "Commentaire retards au départ",
+				"type": "String"
+			},
+			{
+				"name": "Nombre de trains en retard à l'arrivée",
+				"type": "String"
+			},
+			{
+				"name": "Retard moyen des trains en retard à l'arrivée",
+				"type": "String"
+			},
+			{
+				"name": "Retard moyen de tous les trains à l'arrivée",
+				"type": "String"
+			},
+			{
+				"name": "Commentaire retards à l'arrivée",
+				"type": "String"
+			},
+			{
+				"name": "Nombre trains en retard > 15min",
+				"type": "String"
+			},
+			{
+				"name": "Retard moyen trains en retard > 15 (si liaison concurrencée par vol)",
+				"type": "String"
+			},
+			{
+				"name": "Nombre trains en retard > 30min",
+				"type": "String"
+			},
+			{
+				"name": "Nombre trains en retard > 60min",
+				"type": "String"
+			},
+			{
+				"name": "Prct retard pour causes externes",
+				"type": "String"
+			},
+			{
+				"name": "Prct retard pour cause infrastructure",
+				"type": "String"
+			},
+			{
+				"name": "Prct retard pour cause gestion trafic",
+				"type": "String"
+			},
+			{
+				"name": "Prct retard pour cause matériel roulant",
+				"type": "String"
+			},
+			{
+				"name": "Prct retard pour cause gestion en gare et réutilisation de matériel",
+				"type": "String"
+			},
+			{
+				"name": "Prct retard pour cause prise en compte voyageurs (affluence, gestions PSH, correspondances)",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,9 @@
+{
+	"name": "adf-transport-analysis",
+	"location": "francecentral",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "89cbbf74-e89b-4272-8baa-2cbe63afe20a",
+		"tenantId": "413600cf-bd4e-4c7c-8a61-69e73cddf731"
+	}
+}
