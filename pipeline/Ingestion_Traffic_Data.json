@@ -13,7 +13,16 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": [],
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "raw-data//observatoire-parisien-des-mobilites-barometre-trimestriel-des-deplacements.csv"
+					},
+					{
+						"name": "Destination",
+						"value": "processed-data//"
+					}
+				],
 				"typeProperties": {
 					"source": {
 						"type": "DelimitedTextSource",
