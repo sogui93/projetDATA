@@ -1,1 +1,2 @@
 # projetDATA
+Ce projet présente une analyse détaillée des performances de ponctualité des trains TGV en France pour les années 2022, 2023 et 2024. Les indicateurs principaux incluent les annulations, les retards au départ et à l'arrivée, ainsi que les raisons de ces retards. La comparaison des services nationaux et internationaux ainsi que les performances spécifiques de certaines gares sont également abordées.
